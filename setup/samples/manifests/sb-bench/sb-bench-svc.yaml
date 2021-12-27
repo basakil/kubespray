@@ -1,0 +1,13 @@
+# hello-kubernetes-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sb-bench
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8080
+    nodePort: 32121
+  selector:
+    app: sb-bench

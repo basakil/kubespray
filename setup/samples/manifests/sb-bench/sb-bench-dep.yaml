@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sb-bench
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sb-bench
+  template:
+    metadata:
+      labels:
+        app: sb-bench
+    spec:
+      containers:
+      - name: sb-bench
+        image: basakil/sb-bench:0.14
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MESSAGE
+          value: hello-kubernetes message..

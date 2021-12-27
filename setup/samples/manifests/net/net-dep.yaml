@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: net
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: net
+  template:
+    metadata:
+      labels:
+        app: net
+    spec:
+      containers:
+      - name: net
+        # command: ["/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"]
+        image: praqma/network-multitool:extra
+        ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
+        env:
+        - name: MESSAGE
+          value: hello-kubernetes message..

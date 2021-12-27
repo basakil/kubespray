@@ -1,0 +1,22 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: macvlan
+spec:
+  ## mode (string, optional): one of “bridge”, “private”, “vepa”, “passthru”
+  config: '{
+      "cniVersion": "0.3.0",
+      "type": "macvlan",
+      "master": "enp1s0",
+      "mode": "bridge",
+      "ipam": {
+        "type": "host-local",
+        "subnet": "192.168.122.0/24",
+        "rangeStart": "192.168.122.55",
+        "rangeEnd": "192.168.122.75",
+        "routes": [
+          { "dst": "0.0.0.0/0" }
+        ],
+        "gateway": "192.168.122.1"
+      }
+    }'
