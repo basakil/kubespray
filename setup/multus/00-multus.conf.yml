@@ -1,0 +1,37 @@
+{
+  "capabilities": { "bandwidth": true, "portMappings": true },
+  "cniVersion": "0.3.1",
+  "delegates":
+    [
+      {
+        "cniVersion": "0.3.1",
+        "name": "cni0",
+        "plugins":
+          [
+            {
+              "datastore_type": "kubernetes",
+              "ipam":
+                {
+                  "assign_ipv4": "true",
+                  "ipv4_pools": ["10.233.64.0/18"],
+                  "type": "calico-ipam",
+                },
+              "kubernetes":
+                { "kubeconfig": "/etc/cni/net.d/calico-kubeconfig" },
+              "log_file_path": "/var/log/calico/cni/cni.log",
+              "log_level": "info",
+              "nodename": "node1",
+              "policy": { "type": "k8s" },
+              "type": "calico",
+            },
+            { "capabilities": { "portMappings": true }, "type": "portmap" },
+            { "capabilities": { "bandwidth": true }, "type": "bandwidth" },
+          ],
+      },
+    ],
+  "logLevel": "verbose",
+  "logToStderr": true,
+  "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig",
+  "name": "multus-cni-network",
+  "type": "multus",
+}

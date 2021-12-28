@@ -1,18 +1,19 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: net-pod
+  name: net-pod-hostnetwork
   labels:
     app: net-pod
-    app-parent: net   
+    app-parent: net  
   annotations:
     # k8s.v1.cni.cncf.io/networks: '[{
     #   "name": "macvlan",
     #   "default-route": ["192.168.122.1"]
     # }]'
 spec:
+  hostNetwork: true
   containers:
-  - name: net-pod
+  - name: net-pod-hostnetwork
     # command: ["/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"]
     image: praqma/network-multitool:extra    
     env:
