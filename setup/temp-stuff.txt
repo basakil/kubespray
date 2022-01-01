@@ -1,0 +1,218 @@
+befor snapshot..
+
+total 3,5G
+drwx--x--x 2 root         root 4,0K Ara 22 23:48 .
+drwxr-xr-x 7 root         root 4,0K Ara 22 23:34 ..
+-rw------- 1 libvirt-qemu kvm   46G Ara 23 20:01 ubuntu20.04.qcow2
+alx@alx-ev1:~/Downloads$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           3,2G  2,0M  3,2G   1% /run
+/dev/nvme0n1p2  468G   25G  420G   6% /
+tmpfs            16G  121M   16G   1% /dev/shm
+tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+tmpfs            16G     0   16G   0% /run/qemu
+/dev/nvme0n1p1  511M  5,4M  506M   2% /boot/efi
+tmpfs           3,2G  112K  3,2G   1% /run/user/1000
+
+######## after making the running snapshot test1....
+
+alx@alx-ev1:~/Downloads$ sudo ls -alh /var/lib/libvirt/images
+total 5,2G
+drwx--x--x 2 root         root 4,0K Ara 22 23:48 .
+drwxr-xr-x 7 root         root 4,0K Ara 22 23:34 ..
+-rw------- 1 libvirt-qemu kvm   47G Ara 23 20:12 ubuntu20.04.qcow2
+alx@alx-ev1:~/Downloads$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           3,2G  2,0M  3,2G   1% /run
+/dev/nvme0n1p2  468G   26G  419G   6% /
+tmpfs            16G  121M   16G   1% /dev/shm
+tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+tmpfs            16G     0   16G   0% /run/qemu
+/dev/nvme0n1p1  511M  5,4M  506M   2% /boot/efi
+tmpfs           3,2G  112K  3,2G   1% /run/user/1000
+
+######## after making the powered-off snapshot test2....
+lx@alx-ev1:~/Downloads$ sudo ls -alh /var/lib/libvirt/images
+total 5,3G
+drwx--x--x 2 root root 4,0K Ara 22 23:48 .
+drwxr-xr-x 7 root root 4,0K Ara 22 23:34 ..
+-rw------- 1 root root  47G Ara 23 20:20 ubuntu20.04.qcow2
+alx@alx-ev1:~/Downloads$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           3,2G  1,9M  3,2G   1% /run
+/dev/nvme0n1p2  468G   26G  419G   6% /
+tmpfs            16G  121M   16G   1% /dev/shm
+tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+tmpfs            16G     0   16G   0% /run/qemu
+/dev/nvme0n1p1  511M  5,4M  506M   2% /boot/efi
+tmpfs           3,2G  112K  3,2G   1% /run/user/1000
+
+######## after making the powered-off snapshot test3....
+alx@alx-ev1:~/Downloads$ sudo ls -alh /var/lib/libvirt/images
+total 5,3G
+drwx--x--x 2 root root 4,0K Ara 22 23:48 .
+drwxr-xr-x 7 root root 4,0K Ara 22 23:34 ..
+-rw------- 1 root root  47G Ara 23 20:27 ubuntu20.04.qcow2
+alx@alx-ev1:~/Downloads$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           3,2G  1,9M  3,2G   1% /run
+/dev/nvme0n1p2  468G   26G  419G   6% /
+tmpfs            16G  121M   16G   1% /dev/shm
+tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+tmpfs            16G     0   16G   0% /run/qemu
+/dev/nvme0n1p1  511M  5,4M  506M   2% /boot/efi
+tmpfs           3,2G  108K  3,2G   1% /run/user/1000
+
+######################### After applying snapshot test1 #######################
+alx@alx-ev1:~/Downloads$ sudo ls -alh /var/lib/libvirt/images
+total 5,3G
+drwx--x--x 2 root         root 4,0K Ara 22 23:48 .
+drwxr-xr-x 7 root         root 4,0K Ara 22 23:34 ..
+-rw------- 1 libvirt-qemu kvm   47G Ara 23 20:41 ubuntu20.04.qcow2
+alx@alx-ev1:~/Downloads$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           3,2G  2,0M  3,2G   1% /run
+/dev/nvme0n1p2  468G   26G  419G   6% /
+tmpfs            16G  125M   16G   1% /dev/shm
+tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+tmpfs            16G     0   16G   0% /run/qemu
+/dev/nvme0n1p1  511M  5,4M  506M   2% /boot/efi
+tmpfs           3,2G  112K  3,2G   1% /run/user/1000
+
+######################### After adding snapshot test1-1 and applying snapshot test2 #######################
+alx@alx-ev1:~/Downloads$ sudo ls -alh /var/lib/libvirt/images
+total 5,3G
+drwx--x--x 2 root         root 4,0K Ara 22 23:48 .
+drwxr-xr-x 7 root         root 4,0K Ara 22 23:34 ..
+-rw------- 1 libvirt-qemu kvm   47G Ara 23 21:04 ubuntu20.04.qcow2
+alx@alx-ev1:~/Downloads$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           3,2G  2,0M  3,2G   1% /run
+/dev/nvme0n1p2  468G   26G  419G   6% /
+tmpfs            16G  133M   16G   1% /dev/shm
+tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+tmpfs            16G     0   16G   0% /run/qemu
+/dev/nvme0n1p1  511M  5,4M  506M   2% /boot/efi
+tmpfs           3,2G  112K  3,2G   1% /run/user/1000
+
+##################3 After deleting snapshot test1 #########
+alx@alx-ev1:~/Downloads$ sudo ls -alh /var/lib/libvirt/images
+total 5,3G
+drwx--x--x 2 root root 4,0K Ara 22 23:48 .
+drwxr-xr-x 7 root root 4,0K Ara 22 23:34 ..
+-rw------- 1 root root  47G Ara 23 21:10 ubuntu20.04.qcow2
+alx@alx-ev1:~/Downloads$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           3,2G  1,9M  3,2G   1% /run
+/dev/nvme0n1p2  468G   26G  419G   6% /
+tmpfs            16G  154M   16G   1% /dev/shm
+tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+tmpfs            16G     0   16G   0% /run/qemu
+/dev/nvme0n1p1  511M  5,4M  506M   2% /boot/efi
+tmpfs           3,2G  116K  3,2G   1% /run/user/1000
+
+################ qemu-monitor stuff:
+virsh qemu-monitor-command --hmp <domain> <command>
+virsh list --all
+virsh qemu-monitor-command ubuntu20.04 '{"execute": "query-status"}' --pretty
+virsh qemu-monitor-command ubuntu20.04 --hmp 'info kvm'
+
+
+################# Ansible && Kubespray #####
+ansible-playbook -i your/inventory/inventory.ini cluster.yml -b -v \
+  --private-key=~/.ssh/private_key
+
+sudo apt install python3-pip
+pip install virtualenv
+source ~/.profile
+## in project folder:
+virtualenv .kubespray-ve
+source .kubespray-ve/bin/activate
+sudo pip3 install -r requirements.txt
+## .. do work. when finished, run:
+deactivate
+
+## following:  https://eminaktas.medium.com/single-node-k8s-cluster-with-kubespray-49588410d9d4
+
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/part-of: ingress-nginx
+
+failed to find plugin "macvlan" in path [/opt/cni/bin /opt/cni/bin
+
+in quemu + libvirt vm with kubespray default installation with metallb:
+    with macvlan [bridged]
+        + pods can ping themselves and the external ip's.
+        - external ip's cannot ping (or curl) pods.
+
++ promiscous mode  ==> setting on enp1s0 did not work...
+        Config: { "cniVersion": "0.3.0", "type": "macvlan", "master": "eth1", "mode": "bridge", "ipam": { "type": "host-local", "subnet": "192.168.0.0/24", "rangeStart": "192.168.0.200", "rangeEnd": "192.168.0.216", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "192.168.0.1" } }
+        did not have any effect..
+
+https://cloud.redhat.com/blog/using-the-multus-cni-in-openshift
+For the RHV (Red Hat Virtualization) use case, you will need to change “No network filter” on your network profile before executing the test. For vSwitch in vSphere environments, similar relaxed policies need to be applied.
+
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: host-1
+spec:
+  config: '{
+            "cniVersion": "0.3.1",
+            "type": "host-device",
+            "device": "enp0s8"
+          }'
+
+aile sagligi merkezi...
+
+
+https://docs.openshift.com/container-platform/4.9/networking/ovn_kubernetes_network_provider/enabling-multicast.html
+    receiver: socat UDP4-RECVFROM:12001,ip-add-membership=224.1.0.1:192.168.122.154,fork EXEC:hostname
+    sender: echo | socat STDIO UDP4-DATAGRAM:224.1.0.1:12001,range=192.168.122.0/24,ip-multicast-ttl=64
+    both:   vm: socat STDIO UDP4-DATAGRAM:224.1.0.1:12001,bind=:12003,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.154
+            hostnetwork: socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.154
+            phyical socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.1
+    broadcast: socat STDIO UDP4-DATAGRAM:255.255.255.255:12001,bind=:12003,range=192.168.122.0/24,broadcast
+
+-  hostPort and hostNetwork option ?
+    <hostIP, hostPort, protocol>
+    receiver: ["iperf", "-s", "-u", "-B", "224.0.67.67%eth1", "-i", "1"]
+    sender: iperf -c 224.0.67.67 -u --ttl 5 -t 5 -B 10.0.0.12
+
+
+sudo echo 10 > /sys/class/backlight/intel_backlight/brightness
+
+## socat stuff
+# forward local 12000 to serviceport 11000:
+socat TCP4-LISTEN:12000,fork,reuseaddr TCP4:10.233.38.206:11000
+socat -u TCP4-LISTEN:12000,reuseaddr,fork OPEN:/tmp/test.log,creat,append
+# open mysql to outside:
+socat TCP-LISTEN:3307,reuseaddr,fork UNIX-CONNECT:/var/lib/mysql/mysql.sock
+
+
+=======================================
+### MACVLAN and alternatives:
+macvlan: slave sub-nets? in parent nic. unique MAC addr.
+ipvlan:  slave sub-nets? in parent nic. same   MAC addr. 
+    dhcp server may need client-id /iof mac addr.
+
+macvlan guest cannot communicate with the host, another macvlan is needed on the host: https://backreference.org/2014/03/20/some-notes-on-macvlanmacvtap/#:~:text=Irrespective%20of%20the,with%20the%20guest.
+create a macvlan: ip link add link eth2 macvlan2 address 56:61:4f:7c:77:db type macvlan mode bridge
+set macvlan mode: ip link add link eth2 macvlan2 type macvlan mode <mode>
+get macvlan mode: ip -d link show macvlan2
+========================================
+
+========================================
+======== networking ========
+/etc/network/if-up.d => contains executable files, to be executed when a nic comes up
+can network-manager be disabled and /etc/network/interface file be used?
+following: https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#bridge
+
+========================================
+
+headache and dry caugh for early covid. Then chest pain...
+
+https://www.amazon.com/Mastering-Linux-Network-Administration-LaCroix/dp/1784399590
+https://www.amazon.com/Linux-Networking-Professionals-configure-enterprise/dp/1800202393/
+https://www.amazon.com/Mastering-Linux-Device-Driver-Development/dp/178934204X/
+
+following: https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#bridge
