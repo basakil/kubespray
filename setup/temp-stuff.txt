@@ -207,6 +207,9 @@ get macvlan mode: ip -d link show macvlan2
 can network-manager be disabled and /etc/network/interface file be used?
 following: https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#bridge
 
+make linux a router:
+  sysctl -w net.ipv4.ip_forward=1
+
 ========================================
 
 headache and dry caugh for early covid. Then chest pain...
@@ -216,3 +219,51 @@ https://www.amazon.com/Linux-Networking-Professionals-configure-enterprise/dp/18
 https://www.amazon.com/Mastering-Linux-Device-Driver-Development/dp/178934204X/
 
 following: https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#bridge
+seems good: https://www.altoros.com/blog/kubernetes-networking-writing-your-own-simple-cni-plug-in-with-bash/
+
+
+http://kb.mozillazine.org/Repeatably_downloading_the_same_messages
+[401-410)
+
+sudo ip link add eth10 type dummy
+sudo ip addr add 192.168.100.199/24 brd + dev eth10 label eth10:0
+sudo ip link set dev eth10 up
+
+## sudo ip link set .. eth10 arp on ??
+## bridging: 
+sudo ip link add br0 type bridge
+sudo ip link set eth10 master br0
+sudo ip link set enp1s0 master br0
+
+## on the host machine:
+sudo ip route add 192.168.100.0/24 via 192.168.122.154
+
+
+
+////
+~/.bashrc customizations:
+//////////////
+mkcd()      { if [ ! -d "$@" ];then mkdir -p "$@" ;fi; cd "$@"; }
+alias k='kubectl'
+complete -F __start_kubectl k
+//////////////
+
+//////////
+# vpn plugin error:
+sudo apt-get install network-manager-l2tp
+# failed to activate:
+
+https://twitter.com/Nicolascole77/status/1478453846087286796  :
+Positioning by Al Ries & Jack Trout
+Superconsumers by  @eddiewouldgrow
+Shoe Dog by Phil Knight
+The Self-Made Billionaire Effect by John Sviokla & Mitch Cohen
+The Almanack of Naval Ravikant by @EricJorgenson
+Manage Your Day-to-Day by 99U (Behance)
+The Boron Letters by Gary Halbert
+$100M Offers by Alex Hormozi
+Billion Dollar Loser by Reeves Wiedeman
+Never Split The Difference by FBI hostage negotiator Chris Voss
+
+
+//////////
