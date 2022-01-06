@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+SERVER="${1:-kos@kos1}"
+
+rsync -avrh -e "ssh -i /home/alx/.ssh/id_rsa" setup $SERVER:/home/kos/
+rsync -avrh -e "ssh -i /home/alx/.ssh/id_rsa"  $SERVER:/home/kos/setup .
+
+# JAVA_HOME="${JAVA_HOME:-$(dirname $(dirname $(which java) ) )}"
+# JAVA_HOME="${JAVA_HOME:-$HOME/.sdkman/candidates/java/current}"
+

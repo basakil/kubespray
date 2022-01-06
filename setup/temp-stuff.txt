@@ -267,3 +267,6 @@ Never Split The Difference by FBI hostage negotiator Chris Voss
 
 
 //////////
+
+rsync -avrh -e "ssh -i /home/alx/.ssh/id_rsa" setup kos@kos1:/home/kos/
+rsync -avrh -e "ssh -i /home/alx/.ssh/id_rsa"  kos@kos1:/home/kos/setup .
