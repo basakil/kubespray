@@ -142,11 +142,19 @@ failed to find plugin "macvlan" in path [/opt/cni/bin /opt/cni/bin
 in quemu + libvirt vm with kubespray default installation with metallb:
     with macvlan [bridged]
         + pods can ping themselves and the external ip's.
-        - external ip's cannot ping (or curl) pods.
+        - external ip's cannot ping (or curl) pod macvlan nic.
+in hyperv + 66 net:
+    with macvlan [bridged]
+        + pods can ping themselves. Macvlan cannot route external traffic, default routing should be done via podnetwork.
+        - external ip's cannot ping (or curl) pod macvlan nic.
 
 + promiscous mode  ==> setting on enp1s0 did not work...
         Config: { "cniVersion": "0.3.0", "type": "macvlan", "master": "eth1", "mode": "bridge", "ipam": { "type": "host-local", "subnet": "192.168.0.0/24", "rangeStart": "192.168.0.200", "rangeEnd": "192.168.0.216", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "192.168.0.1" } }
         did not have any effect..
+    ip link set eth0 promisc on
+    ip link set net1 promisc on
+    hyperv:
+    Set-VMNetworkAdapter "<vm-name,can-be-list-via--Get-VM>" -PortMirroring Destination
 
 https://cloud.redhat.com/blog/using-the-multus-cni-in-openshift
 For the RHV (Red Hat Virtualization) use case, you will need to change “No network filter” on your network profile before executing the test. For vSwitch in vSphere environments, similar relaxed policies need to be applied.
@@ -168,6 +176,13 @@ aile sagligi merkezi...
 https://docs.openshift.com/container-platform/4.9/networking/ovn_kubernetes_network_provider/enabling-multicast.html
     receiver: socat UDP4-RECVFROM:12001,ip-add-membership=224.1.0.1:192.168.122.154,fork EXEC:hostname
     sender: echo | socat STDIO UDP4-DATAGRAM:224.1.0.1:12001,range=192.168.122.0/24,ip-multicast-ttl=64
+    both:   vm: socat STDIO UDP4-DATAGRAM:224.1.0.1:12001,bind=:12003,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.154
+            hostnetwork: socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.154
+            phyical socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.1
+    broadcast: socat STDIO UDP4-DATAGRAM:255.255.255.255:12001,bind=:12003,range=192.168.122.0/24,broadcast
+hyperv:
+    receiver: socat UDP4-RECVFROM:12001,ip-add-membership=224.1.0.1:192.168.66.66,fork EXEC:hostname
+    sender: echo | socat STDIO UDP4-DATAGRAM:224.1.0.1:12001,range=192.168.66.0/24,ip-multicast-ttl=64
     both:   vm: socat STDIO UDP4-DATAGRAM:224.1.0.1:12001,bind=:12003,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.154
             hostnetwork: socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.154
             phyical socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.1
@@ -201,8 +216,8 @@ set macvlan mode: ip link add link eth2 macvlan2 type macvlan mode <mode>
 get macvlan mode: ip -d link show macvlan2
 ========================================
 
-========================================
-======== networking ========
+================================================================================
+============ Networking ========================================================
 /etc/network/if-up.d => contains executable files, to be executed when a nic comes up
 can network-manager be disabled and /etc/network/interface file be used?
 following: https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#bridge
@@ -210,9 +225,7 @@ following: https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-i
 make linux a router:
   sysctl -w net.ipv4.ip_forward=1
 
-========================================
-
-headache and dry caugh for early covid. Then chest pain...
+========================
 
 https://www.amazon.com/Mastering-Linux-Network-Administration-LaCroix/dp/1784399590
 https://www.amazon.com/Linux-Networking-Professionals-configure-enterprise/dp/1800202393/
@@ -239,6 +252,24 @@ sudo ip link set enp1s0 master br0
 sudo ip route add 192.168.100.0/24 via 192.168.122.154
 
 
+# 2017 article says manually adding pod and multus, can have external access:
+  http://dougbtv.com/nfvpe/2017/02/22/multus-cni/
+    https://github.com/flannel-io/flannel/blob/master/Documentation/kube-flannel.yml
+# try: https://www.cni.dev/plugins/current/main/bridge/  ??
+
+network renderer is defined with network.renderer in /etc/netplan/*.yaml file
+    systemd-networkd (/etc/systemd/network) OR NetworkManager (nmcli, nmtui) (/etc/NetworkManager)
+      /etc/NetworkManager/NetworkManager.conf , conns: /etc/NetworkManager/system-connections/
+      events: /etc/NetworkManager/dispatcher.d  (or in ubuntu: /etc/network/if-up.d )
+    sudo netplan generate && sudo netplan apply
+
+# DNS:
+systemd-resolved  is a cache. /etc/resolv.conf -> ../run/systemd/resolve/stub-resolv.conf
+resolvectl status
+/etc/nsswitch.conf  ==> dns, host lookup, ... etc
+
+================================================================================
+================================================================================
 
 ////
 ~/.bashrc customizations:
@@ -248,10 +279,17 @@ alias k='kubectl'
 complete -F __start_kubectl k
 //////////////
 
+////////// sync local folder with remote one, no delete..:
+rsync -avrh -e "ssh -i /home/alx/.ssh/id_rsa" setup kos@kos1:/home/kos/
+rsync -avrh -e "ssh -i /home/alx/.ssh/id_rsa"  kos@kos1:/home/kos/setup .
+//////////////
+
 //////////
 # vpn plugin error:
 sudo apt-get install network-manager-l2tp
 # failed to activate:
+/////////////
+
 
 https://twitter.com/Nicolascole77/status/1478453846087286796  :
 Positioning by Al Ries & Jack Trout
@@ -265,8 +303,11 @@ $100M Offers by Alex Hormozi
 Billion Dollar Loser by Reeves Wiedeman
 Never Split The Difference by FBI hostage negotiator Chris Voss
 
-
-//////////
-
-rsync -avrh -e "ssh -i /home/alx/.ssh/id_rsa" setup kos@kos1:/home/kos/
-rsync -avrh -e "ssh -i /home/alx/.ssh/id_rsa"  kos@kos1:/home/kos/setup .
+/////////////////////////////
+linux env for windows alternatives:
+cygwin ==> posix subsystem emulation
+msys2 (+mingw) ==> +windows native system on core-cygwin, +pacman, -old packages (eg iproute2 does not exist, only older version of net-tools)
+    mostly used to build windows native (mid-large) programs/libs like qt, vlc, gimp, ...etc
+wsl2 ==> does not have systemd. some tricks..
+hyperv vm
+/////////////////
