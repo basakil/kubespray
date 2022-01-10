@@ -311,3 +311,7 @@ msys2 (+mingw) ==> +windows native system on core-cygwin, +pacman, -old packages
 wsl2 ==> does not have systemd. some tricks..
 hyperv vm
 /////////////////
+### ssh and port forward:
+ssh -L 192.168.31.149:2222:kos1:22 kos@kos1
+sudo ufw allow from 192.168.31.0/24 to any port 22  ## doit once
+/////////////////
