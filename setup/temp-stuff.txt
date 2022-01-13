@@ -129,7 +129,9 @@ source ~/.profile
 virtualenv .kubespray-ve
 source .kubespray-ve/bin/activate
 sudo pip3 install -r requirements.txt
-## .. do work. when finished, run:
+## .. do work. 
+  ansible-playbook -i inventory/$CLUSTER_FOLDER/hosts.yaml -u kos -b -v --private-key=~/.ssh/id_rsa cluster.yml 2>&1 | tee ansible_run_01-out.tx
+## when finished working, run:
 deactivate
 
 ## following:  https://eminaktas.medium.com/single-node-k8s-cluster-with-kubespray-49588410d9d4
