@@ -175,7 +175,8 @@ aile sagligi merkezi...
 
 https://docs.openshift.com/container-platform/4.9/networking/ovn_kubernetes_network_provider/enabling-multicast.html
     receiver: socat UDP4-RECVFROM:12001,ip-add-membership=224.1.0.1:192.168.122.154,fork EXEC:hostname
-    sender: echo | socat STDIO UDP4-DATAGRAM:224.1.0.1:12001,range=192.168.122.0/24,ip-multicast-ttl=64
+              socat UDP4-RECVFROM:12001,ip-add-membership=224.1.0.1:10.233.90.111,fork EXEC:hostname
+    sender: echo | socat STDIO UDP4-DATAGRAM:224.1.0.1:12001,range=10.233.90.0/24,ip-multicast-ttl=64
     both:   vm: socat STDIO UDP4-DATAGRAM:224.1.0.1:12001,bind=:12003,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.154
             hostnetwork: socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.154
             phyical socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.1
@@ -187,6 +188,13 @@ hyperv:
             hostnetwork: socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.154
             phyical socat STDIO UDP4-DATAGRAM:224.1.0.1:12003,bind=:12001,range=192.168.122.0/24,ip-add-membership=224.1.0.1:192.168.122.1
     broadcast: socat STDIO UDP4-DATAGRAM:255.255.255.255:12001,bind=:12003,range=192.168.122.0/24,broadcast
+
+listen udp single:
+receive:
+  nc -ul 12001
+send:
+  nc -u 192.168.66.66 12001
+  
 
 -  hostPort and hostNetwork option ?
     <hostIP, hostPort, protocol>
@@ -315,3 +323,12 @@ hyperv vm
 ssh -L 192.168.31.149:2222:kos1:22 kos@kos1
 sudo ufw allow from 192.168.31.0/24 to any port 22  ## doit once
 /////////////////
+## flush windows disk drive:
+Write-VolumeCache C
+/////////////////////////
+/// port forwadring and firewall for guests, old, won't work !!! find alternatives
+iptables -t nat -I PREROUTING -p tcp -d 192.168.31.149 --dport 2222 -j DNAT --to-destination 192.168.122.154:22
+iptables -I FORWARD -m state -d 192.168.122.154/24 --state NEW,RELATED,ESTABLISHED -j ACCEPT
+/// 2: start kvm guest with forwarding.. incomplete...
+kvm -hda devonshire.img -net nic -net user,hostfwd=::1234-:22
+//////
