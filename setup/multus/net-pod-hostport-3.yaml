@@ -1,33 +1,32 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: net-pod-hostnetwork
-  labels:
-    app: net-pod
-    app-parent: net  
-  annotations:
-    # k8s.v1.cni.cncf.io/networks: '[{
-    #   "name": "macvlan",
-    #   "default-route": ["192.168.122.1"]
-    # }]'
+  name: net-pod-hostport-3
+  # annotations:
+  #   k8s.v1.cni.cncf.io/networks: macvlan
 spec:
-  hostNetwork: true
   containers:
-  - name: net-pod-hostnetwork
+  - name: net-pod-hostport-3
     # command: ["/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"]
     image: praqma/network-multitool:extra    
+    securityContext:
+      privileged: true   
     env:
     - name:  'HTTP_PORT'
       value: '11000'
     - name:  'HTTPS_PORT'
-      value: '11443'
+      value: '11443' 
+    ports:
+    - containerPort: 11000
+      hostPort: 11002    
   - name: mcast
     # command: ["/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"]
     image: basakil/mcast:1.0-alp-py    
     securityContext:
       privileged: true   
     env: 
-    # ports:
-    # - containerPort: 12001
-    #   hostPort: 12001
-    #   protocol: UDP      
+    ports:
+    - containerPort: 12001
+      hostPort: 12001
+      protocol: UDP
+           
