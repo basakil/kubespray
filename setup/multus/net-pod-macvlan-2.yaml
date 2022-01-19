@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: net-pod-macvlan-2
+  annotations:
+    k8s.v1.cni.cncf.io/networks: macvlan
+spec:
+  containers:
+  - name: net-pod-macvlan
+    # command: ["/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"]
+    image: praqma/network-multitool:extra    
+    securityContext:
+      privileged: true   
+    env:
+    - name:  'HTTP_PORT'
+      value: '11000'
+    - name:  'HTTPS_PORT'
+      value: '11443' 
+    ports:
+    - containerPort: 11000
+    #   hostPort: 12002
+    # - containerPort: 11000
+    #   hostPort: 11002         
+  - name: mcast
+    # command: ["/bin/ash", "-c", "trap : TERM INT; sleep infinity & wait"]
+    image: basakil/mcast:1.0-alp-py    
+    securityContext:
+      privileged: true   
+    env: 
+    ports:
+    - containerPort: 12001
+      # hostPort: 12001
+      protocol: UDP
