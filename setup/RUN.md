@@ -14,6 +14,13 @@ sudo pip3 install -r requirements.txt
 
 deactivate
 ```
+NOTE: `python3-env` is the reccommended way. It is installed via apt /iof pip. Rest should be the same, but not tested.
+//TODO: replace python3-env with virtualenv in docs, when tested.
+
+```bash
+sudo apt install python3-venv
+### rest is the same, but try to refrain from using sudo when installing stuff.
+```
 
 ## in each project run:
 while in project root:
