@@ -20,7 +20,7 @@
   template:
     src: "cni-calico.conflist.j2"
     dest: "/etc/cni/net.d/calico.conflist.template"
-    owner: kube
+    owner: root
   register: calico_conflist
   notify: reset_calico_cni
 
@@ -159,7 +159,8 @@
           "bpfEnabled": {{ calico_bpf_enabled | bool }},
           "bpfExternalServiceMode": "{{ calico_bpf_service_mode }}",
           "wireguardEnabled": {{ calico_wireguard_enabled | bool }},
-          "logSeverityScreen": "{{ calico_felix_log_severity_screen }}" }}
+          "logSeverityScreen": "{{ calico_felix_log_severity_screen }}",
+          "vxlanEnabled": {{ calico_vxlan_mode != 'Never' }} }}
   when:
     - inventory_hostname == groups['kube_control_plane'][0]
 
@@ -242,7 +243,7 @@
           "nodeToNodeMeshEnabled": {{ nodeToNodeMeshEnabled|default('true') }} ,
           {% if calico_advertise_cluster_ips|default(false) %}
           "serviceClusterIPs": [{"cidr": "{{ kube_service_addresses }}" } {{ ',{"cidr":"' + kube_service_addresses_ipv6 + '"}' if enable_dual_stack_networks else '' }}],{% endif %}
-          {% if calico_version is version('v3.18.0', '>') and calico_advertise_service_loadbalancer_ips|length > 0  %}"serviceLoadBalancerIPs": {{ _service_loadbalancer_ips }},{% endif %}
+          {% if calico_advertise_service_loadbalancer_ips|length > 0  %}"serviceLoadBalancerIPs": {{ _service_loadbalancer_ips }},{% endif %}
           "serviceExternalIPs": {{ _service_external_ips|default([]) }} }}
   changed_when: false
   when:
@@ -417,7 +418,8 @@
       "spec": {
         "asNumber": "{{ item.as }}",
         "node": "{{ inventory_hostname }}",
-        "peerIP": "{{ item.router_id }}"
+        "peerIP": "{{ item.router_id }}",
+        "sourceAddress": "{{ item.sourceaddress|default('UseNodeIP') }}"
       }}
   register: output
   retries: 4

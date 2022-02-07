@@ -75,7 +75,7 @@
         --ignore-daemonsets
         --grace-period {{ hostvars['localhost']['drain_grace_period_after_failure'] | default(drain_grace_period) }}
         --timeout {{ hostvars['localhost']['drain_timeout_after_failure'] | default(drain_timeout) }}
-        --delete-local-data {{ kube_override_hostname|default(inventory_hostname) }}
+        --delete-emptydir-data {{ kube_override_hostname|default(inventory_hostname) }}
         {% if drain_pod_selector %}--pod-selector '{{ drain_pod_selector }}'{% endif %}
       when: drain_nodes
       register: result
@@ -103,7 +103,7 @@
             --ignore-daemonsets
             --grace-period {{ drain_fallback_grace_period }}
             --timeout {{ drain_fallback_timeout }}
-            --delete-local-data {{ kube_override_hostname|default(inventory_hostname) }}
+            --delete-emptydir-data {{ kube_override_hostname|default(inventory_hostname) }}
             {% if drain_pod_selector %}--pod-selector '{{ drain_pod_selector }}'{% endif %}
             --disable-eviction
           register: drain_fallback_result
@@ -114,6 +114,7 @@
         - drain_nodes
         - drain_fallback_enabled
         - result.rc != 0
+
   rescue:
     - name: Set node back to schedulable
       command: "{{ bin_dir }}/kubectl --kubeconfig {{ kube_config_dir }}/admin.conf uncordon {{ inventory_hostname }}"
