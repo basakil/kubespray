@@ -334,3 +334,41 @@ iptables -I FORWARD -m state -d 192.168.122.154/24 --state NEW,RELATED,ESTABLISH
 /// 2: start kvm guest with forwarding.. incomplete...
 kvm -hda devonshire.img -net nic -net user,hostfwd=::1234-:22
 //////
+
+
+======
+# default runtime is changed to containerd, so some old additions are irrelevant now..
+diff --color -r inventory/my-cluster inventory/local
+
+containerd ==>
+    enabled and added registry mirrors (may not be necessary??)
+
+    ## AoB: enabled and added a mirror:
+containerd_registries:
+  "docker.io":
+    - "https://registry-1.docker.io"
+    - "https://mirror.gcr.io"
+
+
+k8s-cluster.yml ==>
+    kube_proxy_strict_arp: true
+    kube_encrypt_secret_data: true  ## ==> not necessary
+
+
+
+addons.yml ==>
+    enabled nginx,
+        ports
+        ingress_nginx_host_network: false
+        selectors?
+        namespace
+    enabled cert-manager
+    enabled metallb
+        edit ip range
+        metallb_protocol: "layer2"
+
+soon, add ingress loadbalancer service
+
+IngresClass.metadata.annotations['ingressclass.kubernetes.io/is-default-class: "true"']
+
+======

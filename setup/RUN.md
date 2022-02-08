@@ -14,11 +14,11 @@ sudo pip3 install -r requirements.txt
 
 deactivate
 ```
-NOTE: `python3-env` is the reccommended way. It is installed via apt /iof pip. Rest should be the same, but not tested.
+NOTE: `python3-env` (`python3-virtualenv` ??) is the reccommended way. It is installed via apt /iof pip. Rest should be the same, but not tested.
 //TODO: replace python3-env with virtualenv in docs, when tested.
 
 ```bash
-sudo apt install python3-venv
+sudo apt install python3-virtualenv
 ### rest is the same, but try to refrain from using sudo when installing stuff.
 ```
 
@@ -57,4 +57,33 @@ while in project root (, don't forget virtualenv stuff, before and after, once):
 ```bash
 declare -r CLUSTER_FOLDER='my-cluster'
 ansible-playbook -i inventory/$CLUSTER_FOLDER/hosts.yaml -u kos -b -v --private-key=~/.ssh/id_rsa cluster.yml 2>&1 | tee setup/ansible-run-01.log
+```
+
+## add ingress lb service:
+apply `setup/nginx-ingress-controller-lb-service.yaml`
+### disable hostports, if u want:
+```bash
+kubectl -n ingress-nginx edit daemonset.apps/ingress-nginx-controller
+## comment all (3) hostPort s..
+```
+
+## in the guest machine:
+copy config for current user:
+```bash
+mkdir -p $HOME/.kube
+sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+## update from upstream:
+
+```bash
+git remote add upstream git@github.com:kubernetes-sigs/kubespray.git
+git pull -X theirs upstream release-2.18
+## make changes, add and commit..
+git push
+## do not forget to commit and push the main module, since it holds a reference to submodule HEAD's.
+cd ../..
+## make changes, add and commit
+git push
 ```

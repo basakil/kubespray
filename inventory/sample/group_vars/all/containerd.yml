@@ -38,8 +38,11 @@
 #   - mirror.registry.io
 #   - 172.19.16.11:5000
 
-# containerd_registries:
-#   "docker.io": "https://registry-1.docker.io"
+## AoB: enabled and added a mirror:
+containerd_registries:
+  "docker.io": 
+    - "https://registry-1.docker.io"
+    - "https://mirror.gcr.io"
 
 # containerd_max_container_log_line_size: -1
 

@@ -3,8 +3,8 @@
 # RBAC required. see docs/getting-started.md for access details.
 # dashboard_enabled: false
 
-# Helm deployment
-helm_enabled: false
+# Helm deployment, AoB:
+helm_enabled: true
 
 # Registry deployment
 registry_enabled: false
@@ -12,19 +12,19 @@ registry_enabled: false
 # registry_storage_class: ""
 # registry_disk_size: "10Gi"
 
-# Metrics Server deployment
-metrics_server_enabled: false
+# Metrics Server deployment, AoB:
+metrics_server_enabled: true
 # metrics_server_resizer: false
 # metrics_server_kubelet_insecure_tls: true
 # metrics_server_metric_resolution: 15s
 # metrics_server_kubelet_preferred_address_types: "InternalIP"
 
-# Rancher Local Path Provisioner
-local_path_provisioner_enabled: false
+# Rancher Local Path Provisioner, AoB:
+local_path_provisioner_enabled: true
 # local_path_provisioner_namespace: "local-path-storage"
 # local_path_provisioner_storage_class: "local-path"
 # local_path_provisioner_reclaim_policy: Delete
-# local_path_provisioner_claim_root: /opt/local-path-provisioner/
+# local_path_provisioner_claim_root: /data/local-path/
 # local_path_provisioner_debug: false
 # local_path_provisioner_image_repo: "rancher/local-path-provisioner"
 # local_path_provisioner_image_tag: "v0.0.19"
@@ -89,24 +89,24 @@ rbd_provisioner_enabled: false
 # rbd_provisioner_storage_class: rbd
 # rbd_provisioner_reclaim_policy: Delete
 
-# Nginx ingress controller deployment
-ingress_nginx_enabled: false
-# ingress_nginx_host_network: false
+# Nginx ingress controller deployment, AoB:
+ingress_nginx_enabled: true
+ingress_nginx_host_network: false
 ingress_publish_status_address: ""
-# ingress_nginx_nodeselector:
-#   kubernetes.io/os: "linux"
-# ingress_nginx_tolerations:
-#   - key: "node-role.kubernetes.io/master"
-#     operator: "Equal"
-#     value: ""
-#     effect: "NoSchedule"
-#   - key: "node-role.kubernetes.io/control-plane"
-#     operator: "Equal"
-#     value: ""
-#     effect: "NoSchedule"
-# ingress_nginx_namespace: "ingress-nginx"
-# ingress_nginx_insecure_port: 80
-# ingress_nginx_secure_port: 443
+ingress_nginx_nodeselector:
+  kubernetes.io/os: "linux"
+ingress_nginx_tolerations:
+  - key: "node-role.kubernetes.io/master"
+    operator: "Equal"
+    value: ""
+    effect: "NoSchedule"
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Equal"
+    value: ""
+    effect: "NoSchedule"
+ingress_nginx_namespace: "ingress-nginx"
+ingress_nginx_insecure_port: 80
+ingress_nginx_secure_port: 443
 # ingress_nginx_configmap:
 #   map-hash-bucket-size: "128"
 #   ssl-protocols: "TLSv1.2 TLSv1.3"
@@ -127,45 +127,45 @@ ingress_alb_enabled: false
 # If logging is desired, set to true.
 # alb_ingress_aws_debug: "false"
 
-# Cert manager deployment
-cert_manager_enabled: false
+# Cert manager deployment, AoB:
+cert_manager_enabled: true
 # cert_manager_namespace: "cert-manager"
 # cert_manager_trusted_internal_ca: |
 #   -----BEGIN CERTIFICATE-----
 #   [REPLACE with your CA certificate]
 #   -----END CERTIFICATE-----
 
-# MetalLB deployment
-metallb_enabled: false
+# MetalLB deployment, AoB:
+metallb_enabled: true
 metallb_speaker_enabled: true
-# metallb_ip_range:
-#   - "10.5.0.50-10.5.0.99"
-# metallb_pool_name: "loadbalanced"
-# matallb_auto_assign: true
-# metallb_speaker_nodeselector:
-#   kubernetes.io/os: "linux"
-# metallb_controller_nodeselector:
-#   kubernetes.io/os: "linux"
-# metallb_speaker_tolerations:
-#   - key: "node-role.kubernetes.io/master"
-#     operator: "Equal"
-#     value: ""
-#     effect: "NoSchedule"
-#   - key: "node-role.kubernetes.io/control-plane"
-#     operator: "Equal"
-#     value: ""
-#     effect: "NoSchedule"
-# metallb_controller_tolerations:
-#   - key: "node-role.kubernetes.io/master"
-#     operator: "Equal"
-#     value: ""
-#     effect: "NoSchedule"
-#   - key: "node-role.kubernetes.io/control-plane"
-#     operator: "Equal"
-#     value: ""
-#     effect: "NoSchedule"
+metallb_ip_range:
+  - "192.168.122.220-192.168.122.222"
+metallb_pool_name: "loadbalanced"
+matallb_auto_assign: true
+metallb_speaker_nodeselector:
+  kubernetes.io/os: "linux"
+metallb_controller_nodeselector:
+  kubernetes.io/os: "linux"
+metallb_speaker_tolerations:
+  - key: "node-role.kubernetes.io/master"
+    operator: "Equal"
+    value: ""
+    effect: "NoSchedule"
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Equal"
+    value: ""
+    effect: "NoSchedule"
+metallb_controller_tolerations:
+  - key: "node-role.kubernetes.io/master"
+    operator: "Equal"
+    value: ""
+    effect: "NoSchedule"
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Equal"
+    value: ""
+    effect: "NoSchedule"
 # metallb_version: v0.10.3
-# metallb_protocol: "layer2"
+metallb_protocol: "layer2"
 # metallb_port: "7472"
 # metallb_memberlist_port: "7946"
 # metallb_additional_address_pools:

@@ -125,8 +125,8 @@ kube_apiserver_insecure_port: 0  # (disabled)
 kube_proxy_mode: ipvs
 
 # configure arp_ignore and arp_announce to avoid answering ARP queries from kube-ipvs0 interface
-# must be set to true for MetalLB to work
-kube_proxy_strict_arp: false
+# must be set to true for MetalLB to work, AoB: changed to true from false
+kube_proxy_strict_arp: true
 
 # A string slice of values which specify the addresses to use for NodePorts.
 # Values may be valid IP blocks (e.g. 1.2.3.0/24, 1.2.3.4/32).
