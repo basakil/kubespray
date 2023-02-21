@@ -1,4 +1,4 @@
-# Settin-up and running:
+# Setting-up and running:
 
 ## Setup requiremenets (once):
 ### virtualenv tool is recommended for local only requirement installations.
