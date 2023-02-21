@@ -1,19 +1,19 @@
 all:
   hosts:
-    node1:
-      ansible_host: 192.168.122.106
-      ip: 192.168.122.106
-      access_ip: 192.168.122.106
+    kos11:
+      ansible_host: 192.168.66.33
+      ip: 192.168.66.33
+      access_ip: 192.168.66.33
   children:
     kube_control_plane:
       hosts:
-        node1:
+        kos11:
     kube_node:
       hosts:
-        node1:
+        kos11:
     etcd:
       hosts:
-        node1:
+        kos11:
     k8s_cluster:
       children:
         kube_control_plane:
